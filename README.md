@@ -3,6 +3,11 @@
 
 ![image](https://github.com/ruanqiaohua/ZQAlertViewController/blob/master/image.gif)
 
+可以不设置标题
+自适应内容
+当传一张图片的时候所有都使用第一张
+按钮的点击状态是系统默认状态
+
 ```Objective-C
 
     NSString *message1 = @"每个恋爱";
