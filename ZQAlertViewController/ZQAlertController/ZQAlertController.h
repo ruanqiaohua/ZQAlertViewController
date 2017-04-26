@@ -7,21 +7,29 @@
 //
 
 #import <UIKit/UIKit.h>
-#define space 10
-#define line 4
-
-typedef void(^SelectedCallBack)(NSInteger selectedIndex);
 
 @interface ZQAlertController : UIViewController
 
+typedef void(^SelectedCallBack)(ZQAlertController *alertController,NSInteger selectedIndex);
+
 + (instancetype)alertControllerWithTitle:(NSString *)title message:(NSArray<NSString *> *)messages images:(NSArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack;
+
+@property (nonatomic, strong) UILabel *titleLabel;
 
 @property (nonatomic, strong) UIView *contentView;
 
 @property (nonatomic, assign) CGFloat spacing;
 
+@property (nonatomic, assign) CGFloat lineSpacing;
+
+@property (nonatomic, strong) NSMutableArray <UIButton *> *buttons;
+
+- (void)setTextColor:(UIColor *)color;
+
 - (void)addArrowWithFrame:(CGRect)frame;
 
 - (void)show;
+
+- (void)hidden;
 
 @end

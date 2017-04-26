@@ -18,25 +18,24 @@
 
 @implementation ZQAlertController
 
-+ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSArray<NSString *> *)messages images:(NSArray<NSString *> *)images selectedCallBack:(void (^)(NSInteger))callBack {
++ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSArray<NSString *> *)messages images:(NSArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack {
     
     ZQAlertController *alert = [[ZQAlertController alloc] init];
     alert.contentView = [[UIView alloc] init];
-    [alert.contentView setBackgroundColor:[UIColor whiteColor]];
+    [alert.contentView setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.6]];
     alert.spacing = 10.0;
+    alert.lineSpacing = 4.0;
     
-    UILabel *titleLabel;
     CGRect frame = alert.contentView.frame;
     if (title) {
         
-        titleLabel = [alert titleLabel:title];
-        frame = titleLabel.frame;
+        alert.titleLabel = [alert titleLabel:title];
+        frame = alert.titleLabel.frame;
     }
     
-    NSMutableArray<UIButton *> *mArr;
     if (messages) {
         
-        mArr = [NSMutableArray arrayWithCapacity:messages.count];
+        alert.buttons = [NSMutableArray arrayWithCapacity:messages.count];
         for (int i=0; i<messages.count; i++) {
             
             NSString *message = [messages objectAtIndex:i];
@@ -49,49 +48,49 @@
             UIButton *button = [alert buttonWithMessage:message image:image];
             button.tag = 100+i;
             frame.size.width = (CGRectGetWidth(frame) > CGRectGetWidth(button.frame)) ? CGRectGetWidth(frame):CGRectGetWidth(button.frame);
-            frame.size.height = line + (CGRectGetHeight(frame) + CGRectGetHeight(button.frame));
-            [mArr addObject:button];
+            frame.size.height = alert.lineSpacing + (CGRectGetHeight(frame) + CGRectGetHeight(button.frame));
+            [alert.buttons addObject:button];
         }
 
     }
     
-    frame.size.width += 2*space;
-    frame.size.height += 2*space;
+    frame.size.width += 2*alert.spacing;
+    frame.size.height += 2*alert.spacing;
     alert.contentView.frame = frame;
     
-    if (mArr) {
+    if (alert.buttons) {
         
-        for (int i=0; i<mArr.count; i++) {
+        for (int i=0; i<alert.buttons.count; i++) {
             
-            UIButton *button = [mArr objectAtIndex:i];
-            button.bounds = CGRectMake(0, 0, frame.size.width-2*space, button.frame.size.height);
+            UIButton *button = [alert.buttons objectAtIndex:i];
+            button.bounds = CGRectMake(0, 0, frame.size.width-2*alert.spacing, button.frame.size.height);
             if (i) {
-                UIButton *oldLabel = [mArr objectAtIndex:i-1];
-                button.center = CGPointMake(CGRectGetWidth(frame)/2,line + CGRectGetMaxY(oldLabel.frame)+CGRectGetMidY(button.frame));
+                UIButton *oldLabel = [alert.buttons objectAtIndex:i-1];
+                button.center = CGPointMake(CGRectGetWidth(frame)/2,alert.lineSpacing + CGRectGetMaxY(oldLabel.frame)+CGRectGetMidY(button.frame));
             } else {
-                if (titleLabel) {
-                    titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, space+CGRectGetMidY(titleLabel.frame));
-                    button.center = CGPointMake(CGRectGetWidth(frame)/2,line + CGRectGetMaxY(titleLabel.frame)+CGRectGetMidY(button.frame));
+                if (alert.titleLabel) {
+                    alert.titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, alert.spacing+CGRectGetMidY(alert.titleLabel.frame));
+                    button.center = CGPointMake(CGRectGetWidth(frame)/2,alert.lineSpacing + CGRectGetMaxY(alert.titleLabel.frame)+CGRectGetMidY(button.frame));
                 } else {
-                    button.center = CGPointMake(CGRectGetWidth(frame)/2,space + CGRectGetMaxY(titleLabel.frame)+CGRectGetMidY(button.frame));
+                    button.center = CGPointMake(CGRectGetWidth(frame)/2,alert.spacing + CGRectGetMaxY(alert.titleLabel.frame)+CGRectGetMidY(button.frame));
                 }
             }
             [alert.contentView addSubview:button];
         }
     }
     
-    if (titleLabel && !messages ) {
-        titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, space+CGRectGetMidY(titleLabel.frame));
+    if (alert.titleLabel && !messages ) {
+        alert.titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, alert.spacing+CGRectGetMidY(alert.titleLabel.frame));
     }
 
     [alert.view addSubview:alert.contentView];
-    [alert.contentView addSubview:titleLabel];
+    [alert.contentView addSubview:alert.titleLabel];
     alert.contentView.center = alert.view.center;
     alert.contentView.layer.cornerRadius = 6.0;
     alert.contentView.layer.masksToBounds = YES;
     
     alert.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [alert.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.4]];
+    [alert.view setBackgroundColor:[UIColor clearColor]];
     if (callBack) {
         alert.selectedCb = callBack;
     }
@@ -154,19 +153,23 @@
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = title;
-    titleLabel.textColor = [UIColor blackColor];
+    titleLabel.textColor = [UIColor whiteColor];
     [titleLabel sizeToFit];
     return titleLabel;
 }
 
 - (UIButton *)buttonWithMessage:(NSString *)message image:(UIImage *)image {
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [button setTitle:message forState:UIControlStateNormal];;
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [button setImage:image forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setImage:newImage forState:UIControlStateNormal];
+    [button setImageEdgeInsets:UIEdgeInsetsMake(0, _lineSpacing, 0, 0)];
+    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 2*_lineSpacing, 0, 0)];
     [button sizeToFit];
+    [button setFrame:CGRectMake(0, 0, CGRectGetWidth(button.frame)+2*_lineSpacing, CGRectGetHeight(button.frame)+10)];
     [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     return button;
 }
@@ -175,7 +178,7 @@
     
     NSInteger index = sender.tag - 100;
     if (self.selectedCb) {
-        self.selectedCb(index);
+        self.selectedCb(self,index);
     }
 }
 
@@ -218,9 +221,12 @@
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)setTextColor:(UIColor *)color {
+    
+    _titleLabel.textColor = color;
+    for (UIButton *button in _buttons) {
+        [button setTitleColor:color forState:UIControlStateNormal];
+    }
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

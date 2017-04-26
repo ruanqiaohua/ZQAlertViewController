@@ -30,12 +30,11 @@
     
     CGRect frame = CGRectMake(CGRectGetMidX(sender.frame)-10, CGRectGetMaxY(sender.frame), 20, 10);
         
-    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(NSInteger selectedIndex) {
+    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQAlertController *alertController,NSInteger selectedIndex) {
 
+        [alertController hidden];
         NSLog(@"%ld",selectedIndex);
     }];
-    vc.view.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.4];
-    vc.contentView.backgroundColor = [UIColor whiteColor];
     [vc addArrowWithFrame:frame];
     [vc show];
 }
