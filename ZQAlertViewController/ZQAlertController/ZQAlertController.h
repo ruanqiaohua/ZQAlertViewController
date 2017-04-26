@@ -14,19 +14,19 @@ typedef void(^SelectedCallBack)(ZQAlertController *alertController,NSInteger sel
 
 + (instancetype)alertControllerWithTitle:(NSString *)title message:(NSArray<NSString *> *)messages images:(NSArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack;
 
-@property (nonatomic, strong) UILabel *titleLabel;
-
 @property (nonatomic, strong) UIView *contentView;
 
 @property (nonatomic, assign) CGFloat spacing;
 
 @property (nonatomic, assign) CGFloat lineSpacing;
 
+@property (nonatomic, assign) BOOL arrowHidden;
+
 @property (nonatomic, strong) NSMutableArray <UIButton *> *buttons;
 
 - (void)setTextColor:(UIColor *)color;
 
-- (void)addArrowWithFrame:(CGRect)frame;
+- (void)setStartPoint:(CGPoint)point;
 
 - (void)show;
 

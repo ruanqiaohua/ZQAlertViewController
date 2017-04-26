@@ -28,14 +28,12 @@
     NSString *useConsulting = @"每个恋爱中的人都是诗人";
     NSArray *_list = @[networkError,hardwareFailure,softwareFailures,useConsulting];
     
-    CGRect frame = CGRectMake(CGRectGetMidX(sender.frame)-10, CGRectGetMaxY(sender.frame), 20, 10);
-        
-    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQAlertController *alertController,NSInteger selectedIndex) {
+    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQAlertController *alertController,NSInteger selectedIndex) {
 
         [alertController hidden];
         NSLog(@"%ld",selectedIndex);
     }];
-    [vc addArrowWithFrame:frame];
+    [vc setStartPoint:CGPointMake(sender.center.x, CGRectGetMaxY(sender.frame))];
     [vc show];
 }
 

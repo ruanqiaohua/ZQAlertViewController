@@ -89,6 +89,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="BzK-KX-Lo3" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="0jo-63-wbF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Yb5-LP-Vv1" secondAttribute="trailing" id="Bvm-Xs-gtJ"/>
                             <constraint firstItem="I8P-or-bKG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="CVg-AZ-wtN"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="omw-8t-ZOE" secondAttribute="bottom" constant="20" id="G7c-g8-dcy"/>
                             <constraint firstItem="t59-2B-FMB" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Ggm-U0-MzE"/>
@@ -97,7 +98,6 @@
                             <constraint firstItem="t59-2B-FMB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="KLk-gX-wgb"/>
                             <constraint firstItem="omw-8t-ZOE" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="PbT-A7-Pgh"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="I8P-or-bKG" secondAttribute="bottom" constant="20" id="aaM-bO-kZS"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Yb5-LP-Vv1" secondAttribute="trailing" id="eO5-hQ-qY9"/>
                             <constraint firstItem="j8q-3F-HcI" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hNS-8k-AWQ"/>
                             <constraint firstItem="yec-WI-hTD" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ksf-w7-o5w"/>
                             <constraint firstItem="QeZ-Gb-UBU" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="uBX-0k-Mw2"/>

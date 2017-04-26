@@ -11,7 +11,11 @@
 @interface ZQAlertController ()
 {
     BOOL _isBotton;
+    CAShapeLayer *_arrowLayer;
 }
+
+@property (nonatomic, strong) UILabel *titleLabel;
+
 @property (nonatomic, copy) SelectedCallBack selectedCb;
 
 @end
@@ -98,6 +102,18 @@
     return alert;
 }
 
+- (void)setStartPoint:(CGPoint)point {
+    
+    [self addArrowWithFrame:CGRectMake(point.x-10, point.y-5, 20, 10)];
+}
+
+- (void)setArrowHidden:(BOOL)arrowHidden {
+    
+    if (arrowHidden) {
+        _arrowLayer.hidden = YES;
+    }
+}
+
 - (void)addArrowWithFrame:(CGRect)frame {
 
     UIBezierPath *path = [UIBezierPath bezierPath];
@@ -117,10 +133,10 @@
         [path closePath];
     }
 
-    CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-    layer.path = path.CGPath;
-    layer.fillColor = _contentView.backgroundColor.CGColor;
-    [self.view.layer addSublayer:layer];
+    _arrowLayer = [[CAShapeLayer alloc] init];
+    _arrowLayer.path = path.CGPath;
+    _arrowLayer.fillColor = _contentView.backgroundColor.CGColor;
+    [self.view.layer addSublayer:_arrowLayer];
     
     /** change contentView frame */
     // 如果超过下边缘
@@ -135,7 +151,7 @@
         _contentView.frame = CGRectOffset(_contentView.frame, -CGRectGetMinX(_contentView.frame)+_spacing, 0);
         CGFloat spacing = _spacing+_contentView.layer.cornerRadius*2;
         if (CGRectGetMinX(frame) <  spacing) {
-            layer.frame = CGRectOffset(layer.frame, spacing, 0);
+            _arrowLayer.frame = CGRectOffset(_arrowLayer.frame, spacing, 0);
         }
     }
     // 如果超过右边缘
@@ -144,7 +160,7 @@
         _contentView.frame = CGRectOffset(_contentView.frame, -(CGRectGetMaxX(_contentView.frame)-CGRectGetWidth(self.view.frame))-_spacing, 0);
         CGFloat spacing = _spacing+_contentView.layer.cornerRadius*2;
         if (CGRectGetMaxX(frame)-CGRectGetWidth(self.view.frame) >  spacing) {
-            layer.frame = CGRectOffset(layer.frame, -spacing, 0);
+            _arrowLayer.frame = CGRectOffset(_arrowLayer.frame, -spacing, 0);
         }
     }
 }
@@ -176,6 +192,7 @@
 
 - (void)buttonAction:(UIButton *)sender {
     
+    sender.selected = !sender.selected;
     NSInteger index = sender.tag - 100;
     if (self.selectedCb) {
         self.selectedCb(self,index);
