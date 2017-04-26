@@ -20,8 +20,6 @@ typedef void(^SelectedCallBack)(NSInteger selectedIndex);
 
 @property (nonatomic, assign) CGFloat spacing;
 
-@property (nonatomic, weak) UIView *referenceSubstance;
-
 - (void)addArrowWithFrame:(CGRect)frame;
 
 - (void)show;

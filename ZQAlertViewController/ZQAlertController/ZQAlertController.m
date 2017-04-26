@@ -9,7 +9,9 @@
 #import "ZQAlertController.h"
 
 @interface ZQAlertController ()
-
+{
+    BOOL _isBotton;
+}
 @property (nonatomic, copy) SelectedCallBack selectedCb;
 
 @end
@@ -100,19 +102,35 @@
 - (void)addArrowWithFrame:(CGRect)frame {
 
     UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))];
-    [path addLineToPoint:CGPointMake(CGRectGetMaxX(frame), CGRectGetMaxY(frame))];
-    [path addLineToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMaxY(frame))];
-    [path closePath];
     
+    // 如果超过下边缘
+    _isBotton = CGRectGetMaxY(frame)+CGRectGetHeight(_contentView.frame) > CGRectGetHeight(self.view.frame);
+    if (_isBotton) {
+        
+        [path moveToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame))];
+        [path addLineToPoint:CGPointMake(CGRectGetMaxX(frame), CGRectGetMinY(frame))];
+        [path addLineToPoint:CGPointMake(CGRectGetMidX(frame), CGRectGetMaxY(frame))];
+        [path closePath];
+    } else {
+        [path moveToPoint:CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))];
+        [path addLineToPoint:CGPointMake(CGRectGetMaxX(frame), CGRectGetMaxY(frame))];
+        [path addLineToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMaxY(frame))];
+        [path closePath];
+    }
+
     CAShapeLayer *layer = [[CAShapeLayer alloc] init];
     layer.path = path.CGPath;
-    layer.strokeColor = [UIColor whiteColor].CGColor;
-    layer.fillColor = [UIColor whiteColor].CGColor;
+    layer.fillColor = _contentView.backgroundColor.CGColor;
     [self.view.layer addSublayer:layer];
     
-    // change contentView frame
-    _contentView.center = CGPointMake(CGRectGetMidX(frame), CGRectGetMaxY(frame)+CGRectGetHeight(_contentView.frame)/2);
+    /** change contentView frame */
+    // 如果超过下边缘
+    if (_isBotton) {
+        _contentView.center = CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame)-CGRectGetHeight(_contentView.frame)/2);
+    } else {
+        _contentView.center = CGPointMake(CGRectGetMidX(frame), CGRectGetMaxY(frame)+CGRectGetHeight(_contentView.frame)/2);
+    }
+    // 如果超过左边缘
     if (CGRectGetMinX(_contentView.frame) < 0) {
         
         _contentView.frame = CGRectOffset(_contentView.frame, -CGRectGetMinX(_contentView.frame)+_spacing, 0);
@@ -121,7 +139,7 @@
             layer.frame = CGRectOffset(layer.frame, spacing, 0);
         }
     }
-    
+    // 如果超过右边缘
     if (CGRectGetMaxX(_contentView.frame) > CGRectGetWidth(self.view.frame)) {
         
         _contentView.frame = CGRectOffset(_contentView.frame, -(CGRectGetMaxX(_contentView.frame)-CGRectGetWidth(self.view.frame))-_spacing, 0);
@@ -130,7 +148,6 @@
             layer.frame = CGRectOffset(layer.frame, -spacing, 0);
         }
     }
-    
 }
 
 - (UILabel *)titleLabel:(NSString *)title {
@@ -165,7 +182,35 @@
 - (void)show {
     
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    [rootViewController presentViewController:self animated:NO completion:nil];
+    __block CGRect frame = _contentView.frame;
+    CGFloat height = frame.size.height;
+    
+    if (_isBotton) {
+        
+        frame.origin.y += height;
+        frame.size.height = 0.0;
+        _contentView.frame = frame;
+        [rootViewController presentViewController:self animated:NO completion:^{
+            
+            [UIView animateWithDuration:0.36 animations:^{
+                frame.origin.y -= height;
+                frame.size.height = height;
+                _contentView.frame = frame;
+            }];
+        }];
+    } else {
+        
+        frame.size.height = 0.0;
+        _contentView.frame = frame;
+        [rootViewController presentViewController:self animated:NO completion:^{
+            
+            [UIView animateWithDuration:0.36 animations:^{
+                frame.size.height = height;
+                _contentView.frame = frame;
+            }];
+        }];
+    }
+    
 }
 
 - (void)hidden {

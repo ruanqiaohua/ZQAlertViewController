@@ -28,16 +28,14 @@
     NSString *useConsulting = @"每个恋爱中的人都是诗人";
     NSArray *_list = @[networkError,hardwareFailure,softwareFailures,useConsulting];
     
-    CGRect frame = CGRectMake(150, 200, 20, 10);
-    
-    UIView *view = [[UIView alloc] initWithFrame:frame];
-    view.backgroundColor = [UIColor purpleColor];
-    [self.view addSubview:view];
-    
+    CGRect frame = CGRectMake(CGRectGetMidX(sender.frame)-10, CGRectGetMaxY(sender.frame), 20, 10);
+        
     ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(NSInteger selectedIndex) {
 
         NSLog(@"%ld",selectedIndex);
     }];
+    vc.view.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.4];
+    vc.contentView.backgroundColor = [UIColor whiteColor];
     [vc addArrowWithFrame:frame];
     [vc show];
 }
