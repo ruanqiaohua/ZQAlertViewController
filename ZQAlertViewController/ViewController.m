@@ -28,7 +28,7 @@
     NSString *useConsulting = @"每个恋爱中的人都是诗人";
     NSArray *_list = @[networkError,hardwareFailure,softwareFailures,useConsulting];
     
-    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQAlertController *alertController,NSInteger selectedIndex) {
+    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQAlertController *alertController,NSInteger selectedIndex) {
 
         [alertController hidden];
         NSLog(@"%ld",selectedIndex);
