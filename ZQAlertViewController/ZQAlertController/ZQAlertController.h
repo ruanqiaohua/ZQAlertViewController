@@ -10,12 +10,20 @@
 #define space 10
 #define line 4
 
+typedef void(^SelectedCallBack)(NSInteger selectedIndex);
+
 @interface ZQAlertController : UIViewController
 
-+ (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSArray<NSString *> *)messages images:(nullable NSArray<NSString *> *)images cb:(void (^ _Nullable)(NSInteger))cb;
++ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSArray<NSString *> *)messages images:(NSArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack;
+
+@property (nonatomic, strong) UIView *contentView;
+
+@property (nonatomic, assign) CGFloat spacing;
+
+@property (nonatomic, weak) UIView *referenceSubstance;
+
+- (void)addArrowWithFrame:(CGRect)frame;
 
 - (void)show;
-
-- (void)hidden;
 
 @end

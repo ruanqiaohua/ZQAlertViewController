@@ -22,17 +22,24 @@
 
 - (IBAction)showAlert:(UIButton *)sender {
     
-    NSString *networkError = @"网络故障,请检查网络";
-    NSString *hardwareFailure = @"硬件故障";
-    NSString *softwareFailures = @"软件故障";
-    NSString *useConsulting = @"使用咨询";
+    NSString *networkError = @"每个恋爱";
+    NSString *hardwareFailure = @"每个恋爱中的人";
+    NSString *softwareFailures = @"每个恋爱中的人都是";
+    NSString *useConsulting = @"每个恋爱中的人都是诗人";
     NSArray *_list = @[networkError,hardwareFailure,softwareFailures,useConsulting];
     
-    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"Title" message:_list images:nil cb:^(NSInteger index) {
-        NSLog(@"%ld",(long)index);
-    }];
-    [vc show];
+    CGRect frame = CGRectMake(150, 200, 20, 10);
     
+    UIView *view = [[UIView alloc] initWithFrame:frame];
+    view.backgroundColor = [UIColor purpleColor];
+    [self.view addSubview:view];
+    
+    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(NSInteger selectedIndex) {
+
+        NSLog(@"%ld",selectedIndex);
+    }];
+    [vc addArrowWithFrame:frame];
+    [vc show];
 }
 
 - (void)didReceiveMemoryWarning {

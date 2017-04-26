@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F1129CB31EAF40F600B8826F /* 06@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1129CAF1EAF40F600B8826F /* 06@3x.png */; };
+		F1129CB41EAF40F600B8826F /* 11@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1129CB01EAF40F600B8826F /* 11@3x.png */; };
+		F1129CB51EAF40F600B8826F /* 鹿鹿@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1129CB11EAF40F600B8826F /* 鹿鹿@3x.png */; };
+		F1129CB61EAF40F600B8826F /* 夜晚@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1129CB21EAF40F600B8826F /* 夜晚@3x.png */; };
 		F1CC16A01E87702A004B25F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC169F1E87702A004B25F2 /* main.m */; };
 		F1CC16A31E87702A004B25F2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC16A21E87702A004B25F2 /* AppDelegate.m */; };
 		F1CC16A61E87702A004B25F2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC16A51E87702A004B25F2 /* ViewController.m */; };
@@ -17,6 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F1129CAF1EAF40F600B8826F /* 06@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "06@3x.png"; sourceTree = "<group>"; };
+		F1129CB01EAF40F600B8826F /* 11@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11@3x.png"; sourceTree = "<group>"; };
+		F1129CB11EAF40F600B8826F /* 鹿鹿@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "鹿鹿@3x.png"; sourceTree = "<group>"; };
+		F1129CB21EAF40F600B8826F /* 夜晚@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "夜晚@3x.png"; sourceTree = "<group>"; };
 		F1CC169B1E87702A004B25F2 /* ZQAlertViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZQAlertViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1CC169F1E87702A004B25F2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F1CC16A11E87702A004B25F2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -42,6 +50,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F1580DF91EADC7D800892ACB /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				F1129CAF1EAF40F600B8826F /* 06@3x.png */,
+				F1129CB01EAF40F600B8826F /* 11@3x.png */,
+				F1129CB11EAF40F600B8826F /* 鹿鹿@3x.png */,
+				F1129CB21EAF40F600B8826F /* 夜晚@3x.png */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		F1CC16921E87702A004B25F2 = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +105,7 @@
 		F1CC16B51E877049004B25F2 /* ZQAlertController */ = {
 			isa = PBXGroup;
 			children = (
+				F1580DF91EADC7D800892ACB /* Resource */,
 				F1CC16B61E877049004B25F2 /* ZQAlertController.h */,
 				F1CC16B71E877049004B25F2 /* ZQAlertController.m */,
 			);
@@ -152,8 +172,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1CC16AE1E87702A004B25F2 /* LaunchScreen.storyboard in Resources */,
+				F1129CB61EAF40F600B8826F /* 夜晚@3x.png in Resources */,
 				F1CC16AB1E87702A004B25F2 /* Assets.xcassets in Resources */,
+				F1129CB31EAF40F600B8826F /* 06@3x.png in Resources */,
+				F1129CB51EAF40F600B8826F /* 鹿鹿@3x.png in Resources */,
 				F1CC16A91E87702A004B25F2 /* Main.storyboard in Resources */,
+				F1129CB41EAF40F600B8826F /* 11@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +350,7 @@
 				F1CC16B41E87702A004B25F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -10,25 +10,24 @@
 
 @interface ZQAlertController ()
 
-@property (nonatomic, copy) void (^cb)(NSInteger);
+@property (nonatomic, copy) SelectedCallBack selectedCb;
 
 @end
 
-static ZQAlertController *alert;
-
 @implementation ZQAlertController
 
-+ (nonnull instancetype)alertControllerWithTitle:(nullable NSString *)title message:(nullable NSArray<NSString *> *)messages images:(nullable NSArray<NSString *> *)images cb:(void (^ _Nullable)(NSInteger))cb {
++ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSArray<NSString *> *)messages images:(NSArray<NSString *> *)images selectedCallBack:(void (^)(NSInteger))callBack {
     
-    alert = [[ZQAlertController alloc] init];
-    UIView *view = [[UIView alloc] init];
-    [view setBackgroundColor:[UIColor whiteColor]];
+    ZQAlertController *alert = [[ZQAlertController alloc] init];
+    alert.contentView = [[UIView alloc] init];
+    [alert.contentView setBackgroundColor:[UIColor whiteColor]];
+    alert.spacing = 10.0;
     
     UILabel *titleLabel;
-    CGRect frame = view.frame;
+    CGRect frame = alert.contentView.frame;
     if (title) {
         
-        titleLabel = [self titleLabel:title];
+        titleLabel = [alert titleLabel:title];
         frame = titleLabel.frame;
     }
     
@@ -45,7 +44,7 @@ static ZQAlertController *alert;
             } else {
                 image = [UIImage imageNamed:images[0]];
             }
-            UIButton *button = [self buttonWithMessage:message image:image];
+            UIButton *button = [alert buttonWithMessage:message image:image];
             button.tag = 100+i;
             frame.size.width = (CGRectGetWidth(frame) > CGRectGetWidth(button.frame)) ? CGRectGetWidth(frame):CGRectGetWidth(button.frame);
             frame.size.height = line + (CGRectGetHeight(frame) + CGRectGetHeight(button.frame));
@@ -56,13 +55,14 @@ static ZQAlertController *alert;
     
     frame.size.width += 2*space;
     frame.size.height += 2*space;
-    view.frame = frame;
+    alert.contentView.frame = frame;
     
     if (mArr) {
         
         for (int i=0; i<mArr.count; i++) {
             
             UIButton *button = [mArr objectAtIndex:i];
+            button.bounds = CGRectMake(0, 0, frame.size.width-2*space, button.frame.size.height);
             if (i) {
                 UIButton *oldLabel = [mArr objectAtIndex:i-1];
                 button.center = CGPointMake(CGRectGetWidth(frame)/2,line + CGRectGetMaxY(oldLabel.frame)+CGRectGetMidY(button.frame));
@@ -74,7 +74,7 @@ static ZQAlertController *alert;
                     button.center = CGPointMake(CGRectGetWidth(frame)/2,space + CGRectGetMaxY(titleLabel.frame)+CGRectGetMidY(button.frame));
                 }
             }
-            [view addSubview:button];
+            [alert.contentView addSubview:button];
         }
     }
     
@@ -82,21 +82,58 @@ static ZQAlertController *alert;
         titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, space+CGRectGetMidY(titleLabel.frame));
     }
 
-    [alert.view addSubview:view];
-    [view addSubview:titleLabel];
-    view.center = alert.view.center;
-    view.layer.cornerRadius = 6.0;
-    view.layer.masksToBounds = YES;
+    [alert.view addSubview:alert.contentView];
+    [alert.contentView addSubview:titleLabel];
+    alert.contentView.center = alert.view.center;
+    alert.contentView.layer.cornerRadius = 6.0;
+    alert.contentView.layer.masksToBounds = YES;
     
     alert.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [alert.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.4]];
-    if (cb) {
-        alert.cb = cb;
+    if (callBack) {
+        alert.selectedCb = callBack;
     }
+    
     return alert;
 }
 
-+ (UILabel *)titleLabel:(NSString *)title {
+- (void)addArrowWithFrame:(CGRect)frame {
+
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))];
+    [path addLineToPoint:CGPointMake(CGRectGetMaxX(frame), CGRectGetMaxY(frame))];
+    [path addLineToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMaxY(frame))];
+    [path closePath];
+    
+    CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+    layer.path = path.CGPath;
+    layer.strokeColor = [UIColor whiteColor].CGColor;
+    layer.fillColor = [UIColor whiteColor].CGColor;
+    [self.view.layer addSublayer:layer];
+    
+    // change contentView frame
+    _contentView.center = CGPointMake(CGRectGetMidX(frame), CGRectGetMaxY(frame)+CGRectGetHeight(_contentView.frame)/2);
+    if (CGRectGetMinX(_contentView.frame) < 0) {
+        
+        _contentView.frame = CGRectOffset(_contentView.frame, -CGRectGetMinX(_contentView.frame)+_spacing, 0);
+        CGFloat spacing = _spacing+_contentView.layer.cornerRadius*2;
+        if (CGRectGetMinX(frame) <  spacing) {
+            layer.frame = CGRectOffset(layer.frame, spacing, 0);
+        }
+    }
+    
+    if (CGRectGetMaxX(_contentView.frame) > CGRectGetWidth(self.view.frame)) {
+        
+        _contentView.frame = CGRectOffset(_contentView.frame, -(CGRectGetMaxX(_contentView.frame)-CGRectGetWidth(self.view.frame))-_spacing, 0);
+        CGFloat spacing = _spacing+_contentView.layer.cornerRadius*2;
+        if (CGRectGetMaxX(frame)-CGRectGetWidth(self.view.frame) >  spacing) {
+            layer.frame = CGRectOffset(layer.frame, -spacing, 0);
+        }
+    }
+    
+}
+
+- (UILabel *)titleLabel:(NSString *)title {
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = title;
@@ -105,9 +142,10 @@ static ZQAlertController *alert;
     return titleLabel;
 }
 
-+ (UIButton *)buttonWithMessage:(NSString *)message image:(UIImage *)image {
+- (UIButton *)buttonWithMessage:(NSString *)message image:(UIImage *)image {
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [button setTitle:message forState:UIControlStateNormal];;
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [button setImage:image forState:UIControlStateNormal];
@@ -116,11 +154,11 @@ static ZQAlertController *alert;
     return button;
 }
 
-+ (void)buttonAction:(UIButton *)sender {
+- (void)buttonAction:(UIButton *)sender {
     
     NSInteger index = sender.tag - 100;
-    if (alert.cb) {
-        alert.cb(index);
+    if (self.selectedCb) {
+        self.selectedCb(index);
     }
 }
 
