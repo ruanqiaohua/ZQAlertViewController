@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "ZQAlertController.h"
+#import "ZQPickViewController.h"
 
 @interface ViewController ()
 
@@ -28,7 +28,7 @@
     NSString *message4 = @"每个恋爱中的人都是诗人";
     NSArray *_list = @[message1,message2,message3,message4];
     
-    ZQAlertController *vc = [ZQAlertController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQAlertController *alertController,NSInteger selectedIndex) {
+    ZQPickViewController *vc = [ZQPickViewController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQPickViewController *alertController,NSInteger selectedIndex) {
 
         [alertController hidden];
         NSLog(@"%ld",selectedIndex);

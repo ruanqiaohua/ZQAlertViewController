@@ -17,7 +17,7 @@
 		F1CC16A91E87702A004B25F2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1CC16A71E87702A004B25F2 /* Main.storyboard */; };
 		F1CC16AB1E87702A004B25F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1CC16AA1E87702A004B25F2 /* Assets.xcassets */; };
 		F1CC16AE1E87702A004B25F2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1CC16AC1E87702A004B25F2 /* LaunchScreen.storyboard */; };
-		F1CC16B91E877049004B25F2 /* ZQAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC16B71E877049004B25F2 /* ZQAlertController.m */; };
+		F1CC16B91E877049004B25F2 /* ZQPickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC16B71E877049004B25F2 /* ZQPickViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,8 +35,8 @@
 		F1CC16AA1E87702A004B25F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F1CC16AD1E87702A004B25F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F1CC16AF1E87702A004B25F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F1CC16B61E877049004B25F2 /* ZQAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQAlertController.h; sourceTree = "<group>"; };
-		F1CC16B71E877049004B25F2 /* ZQAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZQAlertController.m; sourceTree = "<group>"; };
+		F1CC16B61E877049004B25F2 /* ZQPickViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQPickViewController.h; sourceTree = "<group>"; };
+		F1CC16B71E877049004B25F2 /* ZQPickViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZQPickViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +80,7 @@
 		F1CC169D1E87702A004B25F2 /* ZQAlertViewController */ = {
 			isa = PBXGroup;
 			children = (
-				F1CC16B51E877049004B25F2 /* ZQAlertController */,
+				F1CC16B51E877049004B25F2 /* ZQPickViewController */,
 				F1CC16A11E87702A004B25F2 /* AppDelegate.h */,
 				F1CC16A21E87702A004B25F2 /* AppDelegate.m */,
 				F1CC16A41E87702A004B25F2 /* ViewController.h */,
@@ -102,14 +102,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		F1CC16B51E877049004B25F2 /* ZQAlertController */ = {
+		F1CC16B51E877049004B25F2 /* ZQPickViewController */ = {
 			isa = PBXGroup;
 			children = (
 				F1580DF91EADC7D800892ACB /* Resource */,
-				F1CC16B61E877049004B25F2 /* ZQAlertController.h */,
-				F1CC16B71E877049004B25F2 /* ZQAlertController.m */,
+				F1CC16B61E877049004B25F2 /* ZQPickViewController.h */,
+				F1CC16B71E877049004B25F2 /* ZQPickViewController.m */,
 			);
-			path = ZQAlertController;
+			path = ZQPickViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,7 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1CC16A61E87702A004B25F2 /* ViewController.m in Sources */,
-				F1CC16B91E877049004B25F2 /* ZQAlertController.m in Sources */,
+				F1CC16B91E877049004B25F2 /* ZQPickViewController.m in Sources */,
 				F1CC16A31E87702A004B25F2 /* AppDelegate.m in Sources */,
 				F1CC16A01E87702A004B25F2 /* main.m in Sources */,
 			);
