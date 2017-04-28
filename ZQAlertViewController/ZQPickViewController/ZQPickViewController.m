@@ -12,17 +12,28 @@
 {
     BOOL _isBotton;
     CAShapeLayer *_arrowLayer;
+    CGFloat _screen_w;
+    CGFloat _screen_h;
+    CGPoint _arrowPoint;
+    NSMutableArray *_temporaryMessages;
+    NSMutableArray *_temporaryImages;
 }
 
 @property (nonatomic, strong) UILabel *titleLabel;
 
 @property (nonatomic, copy) SelectedCallBack selectedCb;
 
+@property (nonatomic, strong) NSMutableArray *messages;
+
+@property (nonatomic, strong) NSMutableArray *images;
+
+@property (nonatomic, copy) NSString *titleText;
+
 @end
 
 @implementation ZQPickViewController
 
-+ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSArray<NSString *> *)messages images:(NSArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack {
++ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSMutableArray<NSString *> *)messages images:(NSMutableArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack {
     
     ZQPickViewController *alert = [[ZQPickViewController alloc] init];
     alert.contentView = [[UIView alloc] init];
@@ -30,68 +41,9 @@
     alert.spacing = 10.0;
     alert.lineSpacing = 4.0;
     
-    CGRect frame = alert.contentView.frame;
-    if (title) {
-        
-        alert.titleLabel = [alert titleLabel:title];
-        frame = alert.titleLabel.frame;
-    }
-    
-    if (messages) {
-        
-        alert.buttons = [NSMutableArray arrayWithCapacity:messages.count];
-        for (int i=0; i<messages.count; i++) {
-            
-            NSString *message = [messages objectAtIndex:i];
-            UIImage *image;
-            if (i < images.count) {
-                image = [UIImage imageNamed:images[i]];
-            } else {
-                image = [UIImage imageNamed:images[0]];
-            }
-            UIButton *button = [alert buttonWithMessage:message image:image];
-            button.tag = 100+i;
-            frame.size.width = (CGRectGetWidth(frame) > CGRectGetWidth(button.frame)) ? CGRectGetWidth(frame):CGRectGetWidth(button.frame);
-            frame.size.height = alert.lineSpacing + (CGRectGetHeight(frame) + CGRectGetHeight(button.frame));
-            [alert.buttons addObject:button];
-        }
-
-    }
-    
-    frame.size.width += 2*alert.spacing;
-    frame.size.height += 2*alert.spacing;
-    alert.contentView.frame = frame;
-    
-    if (alert.buttons) {
-        
-        for (int i=0; i<alert.buttons.count; i++) {
-            
-            UIButton *button = [alert.buttons objectAtIndex:i];
-            button.bounds = CGRectMake(0, 0, frame.size.width-2*alert.spacing, button.frame.size.height);
-            if (i) {
-                UIButton *oldLabel = [alert.buttons objectAtIndex:i-1];
-                button.center = CGPointMake(CGRectGetWidth(frame)/2,alert.lineSpacing + CGRectGetMaxY(oldLabel.frame)+CGRectGetMidY(button.frame));
-            } else {
-                if (alert.titleLabel) {
-                    alert.titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, alert.spacing+CGRectGetMidY(alert.titleLabel.frame));
-                    button.center = CGPointMake(CGRectGetWidth(frame)/2,alert.lineSpacing + CGRectGetMaxY(alert.titleLabel.frame)+CGRectGetMidY(button.frame));
-                } else {
-                    button.center = CGPointMake(CGRectGetWidth(frame)/2,alert.spacing + CGRectGetMaxY(alert.titleLabel.frame)+CGRectGetMidY(button.frame));
-                }
-            }
-            [alert.contentView addSubview:button];
-        }
-    }
-    
-    if (alert.titleLabel && !messages ) {
-        alert.titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, alert.spacing+CGRectGetMidY(alert.titleLabel.frame));
-    }
-
-    [alert.view addSubview:alert.contentView];
-    [alert.contentView addSubview:alert.titleLabel];
-    alert.contentView.center = alert.view.center;
-    alert.contentView.layer.cornerRadius = 6.0;
-    alert.contentView.layer.masksToBounds = YES;
+    alert.titleText = title;
+    alert.messages = messages;
+    alert.images = images;
     
     alert.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [alert.view setBackgroundColor:[UIColor clearColor]];
@@ -102,9 +54,91 @@
     return alert;
 }
 
+- (void)loadUI {
+    
+    if (_temporaryMessages.count > 0) {
+        [_messages addObjectsFromArray:_temporaryMessages];
+    }
+    if (_temporaryImages.count > 0) {
+        [_images addObjectsFromArray:_temporaryImages];
+    }
+    CGRect frame = _contentView.frame;
+    if (_titleText) {
+        
+        _titleLabel = [self titleLabel:_titleText];
+        frame = _titleLabel.frame;
+    }
+    
+    if (_messages) {
+        
+        _buttons = [NSMutableArray arrayWithCapacity:_messages.count];
+        for (int i=0; i<_messages.count; i++) {
+            
+            NSString *message = [_messages objectAtIndex:i];
+            UIImage *image;
+            NSString *imageName;
+            if (i < _images.count) {
+                imageName = _images[i];
+            } else {
+                imageName = _images[0];
+            }
+            image = [UIImage imageNamed:imageName];
+            UIButton *button = [self buttonWithMessage:message image:image];
+            UIImage *highlightedImage = [[UIImage imageNamed:[NSString stringWithFormat:@"%@_p",imageName]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            if (highlightedImage) {
+                [button setImage:highlightedImage forState:UIControlStateHighlighted];
+            }
+            button.tag = 100+i;
+            frame.size.width = (CGRectGetWidth(frame) > CGRectGetWidth(button.frame)) ? CGRectGetWidth(frame):CGRectGetWidth(button.frame);
+            frame.size.height = _lineSpacing + (CGRectGetHeight(frame) + CGRectGetHeight(button.frame));
+            [_buttons addObject:button];
+        }
+        
+    }
+    
+    frame.size.width += 2*_spacing;
+    frame.size.height += 2*_spacing;
+    _contentView.frame = frame;
+    
+    if (_buttons) {
+        
+        for (int i=0; i<_buttons.count; i++) {
+            
+            UIButton *button = [_buttons objectAtIndex:i];
+            button.bounds = CGRectMake(0, 0, frame.size.width-2*_spacing, button.frame.size.height);
+            if (i) {
+                UIButton *oldLabel = [_buttons objectAtIndex:i-1];
+                button.center = CGPointMake(CGRectGetWidth(frame)/2,_lineSpacing + CGRectGetMaxY(oldLabel.frame)+CGRectGetMidY(button.frame));
+            } else {
+                if (_titleLabel) {
+                    _titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, _spacing+CGRectGetMidY(_titleLabel.frame));
+                    button.center = CGPointMake(CGRectGetWidth(frame)/2,_lineSpacing + CGRectGetMaxY(_titleLabel.frame)+CGRectGetMidY(button.frame));
+                } else {
+                    button.center = CGPointMake(CGRectGetWidth(frame)/2,_spacing + CGRectGetMaxY(_titleLabel.frame)+CGRectGetMidY(button.frame));
+                }
+            }
+            [_contentView addSubview:button];
+        }
+    }
+    
+    if (_titleLabel && !_messages ) {
+        _titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, _spacing+CGRectGetMidY(_titleLabel.frame));
+    }
+    
+    [self.view addSubview:_contentView];
+    [_contentView addSubview:_titleLabel];
+    _contentView.center = self.view.center;
+    _contentView.layer.cornerRadius = 6.0;
+    _contentView.layer.masksToBounds = YES;
+    
+    
+    [self addArrowWithFrame:CGRectMake(_arrowPoint.x-10, _arrowPoint.y-5, 20, 10)];
+    
+}
+
 - (void)setStartPoint:(CGPoint)point {
     
-    [self addArrowWithFrame:CGRectMake(point.x-10, point.y-5, 20, 10)];
+    _arrowPoint = point;
 }
 
 - (void)setArrowHidden:(BOOL)arrowHidden {
@@ -115,11 +149,13 @@
 }
 
 - (void)addArrowWithFrame:(CGRect)frame {
-
+    
     UIBezierPath *path = [UIBezierPath bezierPath];
     
+    _screen_w = [UIScreen mainScreen].bounds.size.width;
+    _screen_h = [UIScreen mainScreen].bounds.size.height;
     // 如果超过下边缘
-    _isBotton = CGRectGetMaxY(frame)+CGRectGetHeight(_contentView.frame) > CGRectGetHeight(self.view.frame);
+    _isBotton = CGRectGetMaxY(frame)+CGRectGetHeight(_contentView.frame) > _screen_h;
     if (_isBotton) {
         
         [path moveToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMinY(frame))];
@@ -132,7 +168,9 @@
         [path addLineToPoint:CGPointMake(CGRectGetMinX(frame), CGRectGetMaxY(frame))];
         [path closePath];
     }
-
+    if (_arrowLayer) {
+        [_arrowLayer removeFromSuperlayer];
+    }
     _arrowLayer = [[CAShapeLayer alloc] init];
     _arrowLayer.path = path.CGPath;
     _arrowLayer.fillColor = _contentView.backgroundColor.CGColor;
@@ -155,13 +193,29 @@
         }
     }
     // 如果超过右边缘
-    if (CGRectGetMaxX(_contentView.frame) > CGRectGetWidth(self.view.frame)) {
+    if (CGRectGetMaxX(_contentView.frame) > _screen_w) {
         
-        _contentView.frame = CGRectOffset(_contentView.frame, -(CGRectGetMaxX(_contentView.frame)-CGRectGetWidth(self.view.frame))-_spacing, 0);
+        _contentView.frame = CGRectOffset(_contentView.frame, -(CGRectGetMaxX(_contentView.frame)-_screen_w)-_spacing, 0);
         CGFloat spacing = _spacing+_contentView.layer.cornerRadius*2;
-        if (CGRectGetMaxX(frame)-CGRectGetWidth(self.view.frame) >  spacing) {
+        if (CGRectGetMaxX(frame)-_screen_w >  spacing) {
             _arrowLayer.frame = CGRectOffset(_arrowLayer.frame, -spacing, 0);
         }
+    }
+}
+
+- (void)addNewMessage:(NSString *)message image:(NSString *)image {
+    
+    if (message) {
+        if (!_temporaryMessages) {
+            _temporaryMessages = [NSMutableArray array];
+        }
+        [_temporaryMessages addObject:message];
+    }
+    if (image) {
+        if (!_temporaryImages) {
+            _temporaryImages = [NSMutableArray array];
+        }
+        [_temporaryImages addObject:image];
     }
 }
 
@@ -192,7 +246,6 @@
 
 - (void)buttonAction:(UIButton *)sender {
     
-    sender.selected = !sender.selected;
     NSInteger index = sender.tag - 100;
     if (self.selectedCb) {
         self.selectedCb(self,index);
@@ -201,6 +254,7 @@
 
 - (void)show {
     
+    [self loadUI];
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     __block CGRect frame = _contentView.frame;
     CGFloat height = frame.size.height;
@@ -235,6 +289,15 @@
 
 - (void)hidden {
     
+    for (id object in _temporaryImages) {
+        [_images removeObject:object];
+    }
+    for (id object in _temporaryMessages) {
+        [_messages removeObject:object];
+    }
+    [_temporaryImages removeAllObjects];
+    [_temporaryMessages removeAllObjects];
+    
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -250,7 +313,7 @@
     
     UIView *view = touches.allObjects.firstObject.view;
     if (view == self.view) {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self hidden];
     }
 }
 

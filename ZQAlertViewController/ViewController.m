@@ -11,30 +11,35 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) ZQPickViewController *pickVC;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-}
 
-- (IBAction)showAlert:(UIButton *)sender {
     
     NSString *message1 = @"每个恋爱";
     NSString *message2 = @"每个恋爱中的人";
     NSString *message3 = @"每个恋爱中的人都是";
     NSString *message4 = @"每个恋爱中的人都是诗人";
     NSArray *_list = @[message1,message2,message3,message4];
-    
-    ZQPickViewController *vc = [ZQPickViewController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQPickViewController *alertController,NSInteger selectedIndex) {
 
+    _pickVC = [ZQPickViewController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQPickViewController *alertController,NSInteger selectedIndex) {
+        
         [alertController hidden];
         NSLog(@"%ld",selectedIndex);
     }];
-    [vc setStartPoint:CGPointMake(sender.center.x, CGRectGetMaxY(sender.frame))];
-    [vc show];
+
+}
+
+- (IBAction)showAlert:(UIButton *)sender {
+    
+    [_pickVC setStartPoint:CGPointMake(sender.center.x, CGRectGetMaxY(sender.frame))];
+    [_pickVC addNewMessage:@"小心心" image:@"06.png"];
+    [_pickVC show];
 }
 
 - (void)didReceiveMemoryWarning {
