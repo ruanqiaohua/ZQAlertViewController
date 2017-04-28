@@ -12,7 +12,7 @@
 
 typedef void(^SelectedCallBack)(ZQPickViewController *alertController,NSInteger selectedIndex);
 
-+ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSMutableArray<NSString *> *)messages images:(NSMutableArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack;
++ (instancetype)alertControllerWithTitle:(NSString *)title messages:(NSMutableArray<NSString *> *)messages images:(NSMutableArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack;
 
 @property (nonatomic, strong) UIView *contentView;
 

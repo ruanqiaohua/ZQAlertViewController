@@ -33,7 +33,7 @@
 
 @implementation ZQPickViewController
 
-+ (instancetype)alertControllerWithTitle:(NSString *)title message:(NSMutableArray<NSString *> *)messages images:(NSMutableArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack {
++ (instancetype)alertControllerWithTitle:(NSString *)title messages:(NSMutableArray<NSString *> *)messages images:(NSMutableArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack {
     
     ZQPickViewController *alert = [[ZQPickViewController alloc] init];
     alert.contentView = [[UIView alloc] init];
@@ -56,6 +56,7 @@
 
 - (void)loadUI {
     
+    [_contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (_temporaryMessages.count > 0) {
         [_messages addObjectsFromArray:_temporaryMessages];
     }
@@ -64,7 +65,6 @@
     }
     CGRect frame = _contentView.frame;
     if (_titleText) {
-        
         _titleLabel = [self titleLabel:_titleText];
         frame = _titleLabel.frame;
     }
@@ -89,6 +89,7 @@
                 [button setImage:highlightedImage forState:UIControlStateHighlighted];
             }
             button.tag = 100+i;
+            [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
             frame.size.width = (CGRectGetWidth(frame) > CGRectGetWidth(button.frame)) ? CGRectGetWidth(frame):CGRectGetWidth(button.frame);
             frame.size.height = _lineSpacing + (CGRectGetHeight(frame) + CGRectGetHeight(button.frame));
             [_buttons addObject:button];
@@ -107,8 +108,8 @@
             UIButton *button = [_buttons objectAtIndex:i];
             button.bounds = CGRectMake(0, 0, frame.size.width-2*_spacing, button.frame.size.height);
             if (i) {
-                UIButton *oldLabel = [_buttons objectAtIndex:i-1];
-                button.center = CGPointMake(CGRectGetWidth(frame)/2,_lineSpacing + CGRectGetMaxY(oldLabel.frame)+CGRectGetMidY(button.frame));
+                UIButton *oldButton = [_buttons objectAtIndex:i-1];
+                button.center = CGPointMake(CGRectGetWidth(frame)/2,_lineSpacing + CGRectGetMaxY(oldButton.frame)+CGRectGetMidY(button.frame));
             } else {
                 if (_titleLabel) {
                     _titleLabel.center = CGPointMake(CGRectGetWidth(frame)/2, _spacing+CGRectGetMidY(_titleLabel.frame));
@@ -230,17 +231,22 @@
 
 - (UIButton *)buttonWithMessage:(NSString *)message image:(UIImage *)image {
     
-    UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [button setTitle:message forState:UIControlStateNormal];;
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setImage:newImage forState:UIControlStateNormal];
-    [button setImageEdgeInsets:UIEdgeInsetsMake(0, _lineSpacing, 0, 0)];
-    [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 2*_lineSpacing, 0, 0)];
-    [button sizeToFit];
-    [button setFrame:CGRectMake(0, 0, CGRectGetWidth(button.frame)+2*_lineSpacing, CGRectGetHeight(button.frame)+10)];
-    [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (image) {
+        UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        [button setImage:newImage forState:UIControlStateNormal];
+        [button setImageEdgeInsets:UIEdgeInsetsMake(0, _lineSpacing, 0, 0)];
+        [button setTitleEdgeInsets:UIEdgeInsetsMake(0, 2*_lineSpacing, 0, 0)];
+        [button sizeToFit];
+        [button setFrame:CGRectMake(0, 0, CGRectGetWidth(button.frame)+2*_lineSpacing, CGRectGetHeight(button.frame)+_spacing)];
+    } else {
+        [button sizeToFit];
+        [button setFrame:CGRectMake(0, 0, CGRectGetWidth(button.frame), CGRectGetHeight(button.frame)+_spacing)];
+    }
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     return button;
 }
 

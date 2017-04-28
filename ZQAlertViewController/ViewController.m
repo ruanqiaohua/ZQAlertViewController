@@ -25,9 +25,10 @@
     NSString *message2 = @"每个恋爱中的人";
     NSString *message3 = @"每个恋爱中的人都是";
     NSString *message4 = @"每个恋爱中的人都是诗人";
-    NSArray *_list = @[message1,message2,message3,message4];
+    NSMutableArray *messages = [NSMutableArray arrayWithArray:@[message1,message2,message3,message4]];
+    NSMutableArray *images = [NSMutableArray arrayWithArray:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",]];
 
-    _pickVC = [ZQPickViewController alertControllerWithTitle:@"诗人" message:_list images:@[@"06.png",@"11.png",@"鹿鹿.png",@"夜晚.png",] selectedCallBack:^(ZQPickViewController *alertController,NSInteger selectedIndex) {
+    _pickVC = [ZQPickViewController alertControllerWithTitle:@"诗人" messages:messages images:images selectedCallBack:^(ZQPickViewController *alertController,NSInteger selectedIndex) {
         
         [alertController hidden];
         NSLog(@"%ld",selectedIndex);
