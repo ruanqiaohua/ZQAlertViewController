@@ -27,6 +27,8 @@
 
 @property (nonatomic, strong) NSMutableArray *images;
 
+@property (nonatomic, strong) NSMutableArray <UIButton *> *buttons;
+
 @property (nonatomic, copy) NSString *titleText;
 
 @end
@@ -36,10 +38,19 @@
 + (instancetype)alertControllerWithTitle:(NSString *)title messages:(NSMutableArray<NSString *> *)messages images:(NSMutableArray<NSString *> *)images selectedCallBack:(SelectedCallBack)callBack {
     
     ZQPickViewController *alert = [[ZQPickViewController alloc] init];
-    alert.contentView = [[UIView alloc] init];
+    alert.contentView = [[UIScrollView alloc] init];
     [alert.contentView setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.6]];
+    alert.contentView.showsVerticalScrollIndicator = NO;
+    alert.contentView.showsHorizontalScrollIndicator = NO;
     alert.spacing = 10.0;
     alert.lineSpacing = 4.0;
+    alert.maxHeight = CGFLOAT_MAX;
+    alert.selectedIndex = -1;
+    alert.titleTextColor = [UIColor whiteColor];
+    alert.textColor = [UIColor whiteColor];
+    alert.textFont = [UIFont systemFontOfSize:14];
+    alert.titleTextFont = [UIFont systemFontOfSize:16];
+    alert.textHighlightedColor = [UIColor lightGrayColor];
     
     alert.titleText = title;
     alert.messages = messages;
@@ -50,7 +61,6 @@
     if (callBack) {
         alert.selectedCb = callBack;
     }
-    
     return alert;
 }
 
@@ -84,9 +94,11 @@
             }
             image = [UIImage imageNamed:imageName];
             UIButton *button = [self buttonWithMessage:message image:image];
-            UIImage *highlightedImage = [[UIImage imageNamed:[NSString stringWithFormat:@"%@_p",imageName]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-            if (highlightedImage) {
-                [button setImage:highlightedImage forState:UIControlStateHighlighted];
+            UIImage *selectedImage = [[UIImage imageNamed:[NSString stringWithFormat:@"%@_s",imageName]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            if (selectedImage) {
+                if (i == _selectedIndex) {
+                    [button setImage:selectedImage forState:UIControlStateNormal];
+                }
             }
             button.tag = 100+i;
             [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -99,8 +111,14 @@
     
     frame.size.width += 2*_spacing;
     frame.size.height += 2*_spacing;
-    _contentView.frame = frame;
     
+    _contentView.frame = frame;
+    _contentView.contentSize = CGSizeMake(1, frame.size.height+1);
+    if (_contentView.frame.size.height >= _maxHeight) {
+        frame.size.height = _maxHeight;
+        _contentView.frame = frame;
+    }
+
     if (_buttons) {
         
         for (int i=0; i<_buttons.count; i++) {
@@ -131,7 +149,6 @@
     _contentView.center = self.view.center;
     _contentView.layer.cornerRadius = 6.0;
     _contentView.layer.masksToBounds = YES;
-    
     
     [self addArrowWithFrame:CGRectMake(_arrowPoint.x-10, _arrowPoint.y-5, 20, 10)];
     
@@ -224,17 +241,19 @@
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = title;
-    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textColor = _titleTextColor;
+    titleLabel.font = _titleTextFont;
     [titleLabel sizeToFit];
     return titleLabel;
 }
 
 - (UIButton *)buttonWithMessage:(NSString *)message image:(UIImage *)image {
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:message forState:UIControlStateNormal];;
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:message forState:UIControlStateNormal];
+    [button setTitleColor:_textColor forState:UIControlStateNormal];
+    [button setTitleColor:_textHighlightedColor forState:UIControlStateHighlighted];
+    button.titleLabel.font = _textFont;
     if (image) {
         UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         [button setImage:newImage forState:UIControlStateNormal];
@@ -253,6 +272,7 @@
 - (void)buttonAction:(UIButton *)sender {
     
     NSInteger index = sender.tag - 100;
+    _selectedIndex = index;
     if (self.selectedCb) {
         self.selectedCb(self,index);
     }
@@ -305,14 +325,6 @@
     [_temporaryMessages removeAllObjects];
     
     [self dismissViewControllerAnimated:NO completion:nil];
-}
-
-- (void)setTextColor:(UIColor *)color {
-    
-    _titleLabel.textColor = color;
-    for (UIButton *button in _buttons) {
-        [button setTitleColor:color forState:UIControlStateNormal];
-    }
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

@@ -11,6 +11,8 @@
 		F1129CB41EAF40F600B8826F /* 11@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1129CB01EAF40F600B8826F /* 11@3x.png */; };
 		F1129CB51EAF40F600B8826F /* 鹿鹿@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1129CB11EAF40F600B8826F /* 鹿鹿@3x.png */; };
 		F1129CB61EAF40F600B8826F /* 夜晚@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1129CB21EAF40F600B8826F /* 夜晚@3x.png */; };
+		F1A992F01EB9B2BE006883F2 /* play_s@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1A992EE1EB9B2BE006883F2 /* play_s@2x.png */; };
+		F1A992F11EB9B2BE006883F2 /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F1A992EF1EB9B2BE006883F2 /* play@2x.png */; };
 		F1CC16A01E87702A004B25F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC169F1E87702A004B25F2 /* main.m */; };
 		F1CC16A31E87702A004B25F2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC16A21E87702A004B25F2 /* AppDelegate.m */; };
 		F1CC16A61E87702A004B25F2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1CC16A51E87702A004B25F2 /* ViewController.m */; };
@@ -25,6 +27,8 @@
 		F1129CB01EAF40F600B8826F /* 11@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11@3x.png"; sourceTree = "<group>"; };
 		F1129CB11EAF40F600B8826F /* 鹿鹿@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "鹿鹿@3x.png"; sourceTree = "<group>"; };
 		F1129CB21EAF40F600B8826F /* 夜晚@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "夜晚@3x.png"; sourceTree = "<group>"; };
+		F1A992EE1EB9B2BE006883F2 /* play_s@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play_s@2x.png"; sourceTree = "<group>"; };
+		F1A992EF1EB9B2BE006883F2 /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		F1CC169B1E87702A004B25F2 /* ZQAlertViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZQAlertViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1CC169F1E87702A004B25F2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F1CC16A11E87702A004B25F2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,6 +57,8 @@
 		F1580DF91EADC7D800892ACB /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				F1A992EE1EB9B2BE006883F2 /* play_s@2x.png */,
+				F1A992EF1EB9B2BE006883F2 /* play@2x.png */,
 				F1129CAF1EAF40F600B8826F /* 06@3x.png */,
 				F1129CB01EAF40F600B8826F /* 11@3x.png */,
 				F1129CB11EAF40F600B8826F /* 鹿鹿@3x.png */,
@@ -173,6 +179,8 @@
 			files = (
 				F1CC16AE1E87702A004B25F2 /* LaunchScreen.storyboard in Resources */,
 				F1129CB61EAF40F600B8826F /* 夜晚@3x.png in Resources */,
+				F1A992F11EB9B2BE006883F2 /* play@2x.png in Resources */,
+				F1A992F01EB9B2BE006883F2 /* play_s@2x.png in Resources */,
 				F1CC16AB1E87702A004B25F2 /* Assets.xcassets in Resources */,
 				F1129CB31EAF40F600B8826F /* 06@3x.png in Resources */,
 				F1129CB51EAF40F600B8826F /* 鹿鹿@3x.png in Resources */,
